@@ -1,10 +1,10 @@
 import pymysql
 
 def AddOne(conn,title,recommend,author,price,imageref):
-    cursor = conn.cursor()
     try:
-        sql = "select * from book where title=%s"
-        cursor.execute(sql,title)
+        cursor = conn.cursor()
+        sql = "select * from book where title=%s and author=%s"
+        cursor.execute(sql,(title,author))
         exist = cursor.fetchone()
         if exist is None:
             sql = "insert into book values(0,%s,%s,%s,%s,%s)"

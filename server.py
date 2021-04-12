@@ -1,6 +1,9 @@
 from flask import Flask,request,abort,jsonify
 import pymysql
 import addPart
+import selectPart
+import deletePart
+import updatePart
 app=Flask(__name__)
 
 conn = "123"
@@ -44,6 +47,27 @@ def Addone():
 def AddFile():
     print(request)
     return "服务器返回"
+
+@app.route("/api/SearchBook",methods=['POST'])
+def SearchBook():
+    search = request.json
+    # print(search)
+    result = selectPart.SelectBook(conn,search['keyword'],search['type'])
+    return jsonify(result),200
+
+@app.route("/api/DeleteBook",methods=['POST'])
+def DeleteBook():
+    delete = request.json
+    print(delete)
+    deletePart.DeleteBook(conn,delete['idArray'])
+    return jsonify(delete),200
+
+@app.route("/api/UpdateBook",methods=['POST'])
+def UpdateBook():
+    update = request.json
+    print(update)
+    result = updatePart.UpdateBook(conn,update)
+    return jsonify(result),200
 
 if __name__ == "__main__":
     app.run(debug=True)
