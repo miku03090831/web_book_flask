@@ -53,6 +53,8 @@ def SearchBook():
     search = request.json
     # print(search)
     result = selectPart.SelectBook(conn,search['keyword'],search['type'])
+    if result=="bad":
+        return jsonify(result),401
     return jsonify(result),200
 
 @app.route("/api/DeleteBook",methods=['POST'])

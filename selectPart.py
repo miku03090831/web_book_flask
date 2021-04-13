@@ -1,6 +1,8 @@
 import pymysql
 import json
 def SelectBook(conn,keyword,searchType):
+    if type(conn)==type(""):
+        return "bad"
     try:
         cursor = conn.cursor()
         if(searchType==3):
