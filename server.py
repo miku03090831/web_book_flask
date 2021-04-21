@@ -45,8 +45,11 @@ def Addone():
 
 @app.route("/api/AddFile",methods=['POST'])
 def AddFile():
-    print(request)
-    return "服务器返回"
+    f=request.files['addfile']
+    fail = addPart.AddBatch(conn,f)
+    if fail==-1:
+        return jsonify(fail),401
+    return jsonify(fail),200
 
 @app.route("/api/SearchBook",methods=['POST'])
 def SearchBook():
@@ -55,6 +58,7 @@ def SearchBook():
     result = selectPart.SelectBook(conn,search['keyword'],search['type'])
     if result=="bad":
         return jsonify(result),401
+    print(len(result))
     return jsonify(result),200
 
 @app.route("/api/DeleteBook",methods=['POST'])

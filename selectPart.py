@@ -24,6 +24,9 @@ def SelectBook(conn,keyword,searchType):
             book['price']=float(item[4])
             book['pic_refs']=item[5]
             jsonResult.append(book)
+            print(len(jsonResult))
+        if len(jsonResult)==0:
+            return "bad"
         return jsonResult
     except:
         conn.rollback()

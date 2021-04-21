@@ -1,4 +1,6 @@
 import pymysql
+import csv
+import json
 
 def AddOne(conn,title,recommend,author,price,imageref):
     try:
@@ -19,3 +21,28 @@ def AddOne(conn,title,recommend,author,price,imageref):
         errmsg = "%s" % e
         print(errmsg)
         return errmsg
+
+def AddBatch(conn,file):
+    try:
+        items = file.read().decode('utf-8').split("}")[:-1]
+        failList = []
+        for item in items:
+            item = item+"}"
+            item = json.loads(item)
+            title = item['title']
+            recommend = item['recommend']
+            author = item['author']
+            price = item['price']
+            imageref = item['iamge']
+            print(title+" "+recommend+" "+author+" "+price+" "+imageref)
+            add = AddOne(conn,title,recommend,author,price,imageref)
+            if add!=0:
+                failList.append({'title':title,'reason':add})
+        return failList
+    except Exception as e:
+        errmsg = "%s" % e
+        print(errmsg)
+        return -1
+        
+    
+    
