@@ -1,10 +1,13 @@
 import pymysql
-def DeleteBook(conn,idArray):
+def DeleteBook(conn,idArray,lock):
     sql = "delete from book where id = %s"
-    for id in idArray:
+    for num in idArray:
         try:
             cursor = conn.cursor()
-            cursor.execute(sql,id)
+            lock.acquire()
+            cursor.execute(sql,str(num))
+            lock.release()
             conn.commit()
-        except:
+        except Exception as e:
+            print(e)
             conn.rollback()

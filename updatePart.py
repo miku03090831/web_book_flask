@@ -1,5 +1,5 @@
 import pymysql
-def UpdateBook(conn,afterBook):
+def UpdateBook(conn,afterBook,lock):
     try:
         cursor = conn.cursor()
         Id = afterBook['id']
@@ -9,7 +9,9 @@ def UpdateBook(conn,afterBook):
         price = afterBook['price']
         pic_refs = afterBook['pic_refs']
         sql = "update book set title = %s, author = %s, recommend = %s, price = %s, imageref = %s where id = %s"
+        lock.acquire()
         cursor.execute(sql,(title,author,recommend,price,pic_refs,Id))
+        lock.release()
         conn.commit()
         return "修改成功"
     except Exception as e:
